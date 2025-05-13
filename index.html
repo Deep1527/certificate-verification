@@ -36,20 +36,22 @@
 <body>
   <h2>Mahakaal Institute of Computer Education</h2>
   <h3>🎓 Certificate Verification</h3>
-  <input type="text" id="reg" placeholder="Enter Registration Number (e.g. Mice001)" />
+  <input type="text" id="reg" placeholder="Enter Registration Number (e.g. MICE001)" />
   <button onclick="verify()">Verify</button>
 
   <div class="result" id="result"></div>
 
   <script>
     function verify() {
-      const reg = document.getElementById("reg").value.trim();
+      let reg = document.getElementById("reg").value.trim();
       const resultDiv = document.getElementById("result");
 
       if (!reg) {
         resultDiv.innerText = "❌ Please enter a registration number.";
         return;
       }
+
+      reg = reg.toUpperCase(); // ✅ Convert to uppercase
 
       resultDiv.innerText = "⏳ Verifying...";
 
