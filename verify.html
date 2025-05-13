@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mahakaal Institute Certificate Verification</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fefefe;
+      text-align: center;
+      padding-top: 100px;
+    }
+    h2 {
+      color: #222;
+    }
+    input {
+      padding: 10px;
+      font-size: 16px;
+      width: 250px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-left: 10px;
+      background-color: #f4c20d;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #222;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <h2>🧾 Mahakaal Institute - Certificate Verification</h2>
+  <p>Enter your Registration Number below (e.g. MICE001):</p>
+  <input type="text" id="regNo" placeholder="MICE001" />
+  <button onclick="checkResult()">Check Result</button>
+
+  <script>
+    function checkResult() {
+      var reg = document.getElementById("regNo").value.trim();
+      if (!reg) {
+        alert("Please enter a registration number.");
+        return;
+      }
+
+      var url = "https://script.google.com/macros/s/AKfycbxCSwkFzJssTkdCc8Prg5QDRti8fqeYvJaU8ZjTIS-u/dev?reg=" + encodeURIComponent(reg);
+      window.open(url, "_blank");
+    }
+  </script>
+</body>
+</html>
