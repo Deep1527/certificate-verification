@@ -1,67 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Certificate Verification - Mahakaal Institute</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f1f1f1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-    h1 {
-      color: #333;
-    }
-    input, button {
-      padding: 10px;
-      font-size: 16px;
-      margin-top: 10px;
-    }
-    #result {
-      white-space: pre-line;
-      margin-top: 20px;
-      background: #fff;
-      padding: 20px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      max-width: 500px;
-      text-align: left;
-    }
-  </style>
-</head>
-<body>
-  <h1>🔍 Certificate Verification</h1>
-  <p>Enter your Registration Number (e.g., Mice001):</p>
-  <input type="text" id="regInput" placeholder="Enter Reg No"/>
-  <button onclick="verify()">Check Result</button>
+function doGet(e) {
+  var reg = e.parameter.reg;
+  if (!reg) {
+    return ContentService.createTextOutput("❗ Please provide registration number as ?reg=Mice001");
+  }
 
-  <div id="result"></div>
+  var ss = SpreadsheetApp.openById("1sr8an4xlg1Bp3xkPflmyq3jfAVjSH2ZjMnXnXuGnJpw"); // ✅ Correct: Using ID
+  var sheet = ss.getSheetByName("CertificateData");
+  var data = sheet.getDataRange().getValues();
 
-  <script>
-    async function verify() {
-      const reg = document.getElementById('regInput').value.trim();
-      const resultDiv = document.getElementById('result');
+  for (var i = 1; i < data.length; i++) {
+    if (data[i][0].toString().toLowerCase() === reg.toLowerCase()) {
+      var name = data[i][1];
+      var course = data[i][2];
+      var marks = data[i][3];
+      var result = data[i][4];
+      var startDate = data[i][5];
+      var endDate = data[i][6];
 
-      if (!reg) {
-        resultDiv.innerText = "❗ Please enter a registration number.";
-        return;
-      }
+      var response = `
+✅ Certificate Verified
 
-      resultDiv.innerText = "⏳ Verifying...";
+👤 Name: ${name}
+🆔 Registration No: ${data[i][0]}
+📘 Course: ${course}
+📅 Start Date: ${startDate}
+📅 End Date: ${endDate}
+📊 Marks: ${marks}
+🎯 Result: ${result}
 
-      try {
-        const response = await fetch(`https://script.google.com/macros/s/AKfycbwIWIGUNjFb5Xm3SiO-KTUBp3h2VHYfSX05hFyTiZ-Y87UZesUCBezLXUd9mdXbXGOlwQ/exec?reg=${encodeURIComponent(reg)}`);
-        const text = await response.text();
-        resultDiv.innerText = text;
-      } catch (err) {
-        resultDiv.innerText = "❌ Error fetching result. Please try again later.";
-      }
+✅ Verified by Mahakaal Institute
+`;
+
+      return ContentService.createTextOutput(response);
     }
-  </script>
-</body>
-</html>
+  }
+
+  return ContentService.createTextOutput("❌ Invalid Registration Number or Not Found.");
+}
