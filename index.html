@@ -15,6 +15,7 @@
       padding: 10px;
       width: 250px;
       font-size: 16px;
+      text-transform: uppercase;
     }
     button {
       padding: 10px 20px;
@@ -36,22 +37,38 @@
 <body>
   <h2>Mahakaal Institute of Computer Education</h2>
   <h3>🎓 Certificate Verification</h3>
-  <input type="text" id="reg" placeholder="Enter Registration Number (e.g. MICE001)" />
+  <input type="text" id="reg" placeholder="Enter Registration Number (e.g. Mice001)" oninput="formatReg()" />
   <button onclick="verify()">Verify</button>
 
   <div class="result" id="result"></div>
 
   <script>
+    function formatReg() {
+      const input = document.getElementById("reg");
+      let value = input.value;
+
+      // Remove all non-alphanumeric characters
+      value = value.replace(/[^a-zA-Z0-9]/g, '');
+
+      // Split letters and numbers
+      const letters = value.slice(0, 4).toLowerCase();
+      const numbers = value.slice(4);
+
+      if (letters.length > 0) {
+        input.value = letters.charAt(0).toUpperCase() + letters.slice(1) + numbers;
+      } else {
+        input.value = numbers;
+      }
+    }
+
     function verify() {
-      let reg = document.getElementById("reg").value.trim();
       const resultDiv = document.getElementById("result");
+      let reg = document.getElementById("reg").value.trim();
 
       if (!reg) {
         resultDiv.innerText = "❌ Please enter a registration number.";
         return;
       }
-
-      reg = reg.toUpperCase(); // ✅ Convert to uppercase
 
       resultDiv.innerText = "⏳ Verifying...";
 
