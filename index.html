@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mahakaal Institute | Certificate Verification ✅</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      text-align: center;
+      padding: 50px;
+    }
+    input[type="text"] {
+      padding: 10px;
+      width: 250px;
+      font-size: 16px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-left: 10px;
+      cursor: pointer;
+    }
+    .result {
+      margin-top: 30px;
+      white-space: pre-line;
+      background: #fff;
+      padding: 20px;
+      display: inline-block;
+      text-align: left;
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+  <h2>Mahakaal Institute of Computer Education</h2>
+  <h3>🎓 Certificate Verification</h3>
+  <input type="text" id="reg" placeholder="Enter Registration Number (e.g. MICE001)" />
+  <button onclick="verify()">Verify</button>
+
+  <div class="result" id="result"></div>
+
+  <script>
+    function verify() {
+      const reg = document.getElementById("reg").value.trim();
+      const resultDiv = document.getElementById("result");
+
+      if (!reg) {
+        resultDiv.innerText = "❌ Please enter a registration number.";
+        return;
+      }
+
+      resultDiv.innerText = "⏳ Verifying...";
+
+      fetch(`https://script.google.com/macros/s/AKfycbxCSwkFzJssTkdCc8Prg5QDRti8fqeYvJaU8ZjTIS-u/dev?reg=${reg}`)
+        .then((res) => res.text())
+        .then((data) => {
+          resultDiv.innerText = data;
+        })
+        .catch(() => {
+          resultDiv.innerText = "❌ Error fetching result. Please try again later.";
+        });
+    }
+  </script>
+</body>
+</html>
