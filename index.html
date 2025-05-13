@@ -20,6 +20,9 @@
         return;
       }
 
+      // Convert to upper case
+      reg = reg.toUpperCase();
+
       // Open Google Apps Script Web App in new tab
       window.open(`https://script.google.com/macros/s/AKfycbyaAJomLxb3gzPZO74rZEstNqZD_7Js_uAOvWZmqsP_uftklWkmGQlozO2kGA4qSKPhtQ/exec?reg=${reg}`, "_blank");
     }
