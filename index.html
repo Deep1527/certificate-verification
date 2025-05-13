@@ -1,82 +1,27 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Mahakaal Institute | Certificate Verification ✅</title>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f2f2f2;
-      text-align: center;
-      padding: 50px;
-    }
-    input[type="text"] {
-      padding: 10px;
-      width: 250px;
-      font-size: 16px;
-      /* ❌ Remove uppercase transformation */
-    }
-    button {
-      padding: 10px 20px;
-      font-size: 16px;
-      margin-left: 10px;
-      cursor: pointer;
-    }
-    .result {
-      margin-top: 30px;
-      white-space: pre-line;
-      background: #fff;
-      padding: 20px;
-      display: inline-block;
-      text-align: left;
-      border: 1px solid #ccc;
-    }
-  </style>
+  <meta charset="UTF-8">
+  <title>Certificate Verification</title>
 </head>
-<body>
-  <h2>Mahakaal Institute of Computer Education</h2>
-  <h3>🎓 Certificate Verification</h3>
-  <input type="text" id="reg" placeholder="Enter Registration Number (e.g. Mice001)" oninput="formatReg()" />
-  <button onclick="verify()">Verify</button>
+<body style="font-family: Arial, sans-serif; text-align: center; padding: 50px;">
+  <h2>🔍 Certificate Verification</h2>
 
-  <div class="result" id="result"></div>
+  <input type="text" id="reg" placeholder="Enter Registration Number (e.g. Mice001)" style="padding: 10px; width: 250px; font-size: 16px;" />
+  
+  <br><br>
+  <button onclick="verify()" style="padding: 10px 20px; font-size: 16px;">Verify</button>
 
   <script>
-    function formatReg() {
-      const input = document.getElementById("reg");
-      let value = input.value.replace(/[^a-zA-Z0-9]/g, '');
-
-      // Make sure letters are formatted as Mice
-      const letters = value.slice(0, 4).toLowerCase();
-      const numbers = value.slice(4);
-
-      if (letters.length > 0) {
-        input.value = letters.charAt(0).toUpperCase() + letters.slice(1) + numbers;
-      } else {
-        input.value = numbers;
-      }
-    }
-
     function verify() {
-      const resultDiv = document.getElementById("result");
       let reg = document.getElementById("reg").value.trim();
-
       if (!reg) {
-        resultDiv.innerText = "❌ Please enter a registration number.";
+        alert("❌ Please enter a registration number.");
         return;
       }
 
-      resultDiv.innerText = "⏳ Verifying...";
-
-      fetch(`https://script.google.com/macros/s/AKfycbxCSwkFzJssTkdCc8Prg5QDRti8fqeYvJaU8ZjTIS-u/dev?reg=${reg}`)
-        .then((res) => res.text())
-        .then((data) => {
-          resultDiv.innerText = data;
-        })
-        .catch(() => {
-          resultDiv.innerText = "❌ Error fetching result. Please try again later.";
-        });
+      // Open Google Apps Script Web App in new tab
+      window.open(`https://script.google.com/macros/s/AKfycbyaAJomLxb3gzPZO74rZEstNqZD_7Js_uAOvWZmqsP_uftklWkmGQlozO2kGA4qSKPhtQ/exec?reg=${reg}`, "_blank");
     }
   </script>
 </body>
