@@ -1,30 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Certificate Verification</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Certificate Verification - Mahakaal Institute</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f1f1f1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    h1 {
+      color: #333;
+    }
+    input, button {
+      padding: 10px;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+    #result {
+      white-space: pre-line;
+      margin-top: 20px;
+      background: #fff;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      max-width: 500px;
+      text-align: left;
+    }
+  </style>
 </head>
-<body style="font-family: Arial, sans-serif; text-align: center; padding: 50px;">
-  <h2>🔍 Certificate Verification</h2>
+<body>
+  <h1>🔍 Certificate Verification</h1>
+  <p>Enter your Registration Number (e.g., Mice001):</p>
+  <input type="text" id="regInput" placeholder="Enter Reg No"/>
+  <button onclick="verify()">Check Result</button>
 
-  <input type="text" id="reg" placeholder="Enter Registration Number (e.g. Mice001)" style="padding: 10px; width: 250px; font-size: 16px;" />
-  
-  <br><br>
-  <button onclick="verify()" style="padding: 10px 20px; font-size: 16px;">Verify</button>
+  <div id="result"></div>
 
   <script>
-    function verify() {
-      let reg = document.getElementById("reg").value.trim();
+    async function verify() {
+      const reg = document.getElementById('regInput').value.trim();
+      const resultDiv = document.getElementById('result');
+
       if (!reg) {
-        alert("❌ Please enter a registration number.");
+        resultDiv.innerText = "❗ Please enter a registration number.";
         return;
       }
 
-      // Convert to upper case
-      reg = reg.toUpperCase();
+      resultDiv.innerText = "⏳ Verifying...";
 
-      // Open Google Apps Script Web App in new tab
-      window.open(`https://script.google.com/macros/s/AKfycbyaAJomLxb3gzPZO74rZEstNqZD_7Js_uAOvWZmqsP_uftklWkmGQlozO2kGA4qSKPhtQ/exec?reg=${reg}`, "_blank");
+      try {
+        const response = await fetch(`https://script.google.com/macros/s/AKfycbwIWIGUNjFb5Xm3SiO-KTUBp3h2VHYfSX05hFyTiZ-Y87UZesUCBezLXUd9mdXbXGOlwQ/exec?reg=${encodeURIComponent(reg)}`);
+        const text = await response.text();
+        resultDiv.innerText = text;
+      } catch (err) {
+        resultDiv.innerText = "❌ Error fetching result. Please try again later.";
+      }
     }
   </script>
 </body>
