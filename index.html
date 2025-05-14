@@ -46,6 +46,17 @@
       .response-text {
         font-size: 16px;
       }
+
+      table {
+        width: 100%;
+      }
+
+      th,
+      td {
+        padding: 8px;
+        text-align: left;
+      }
+
     }
 
     /* Larger Screen (Tablet and Desktop) */
@@ -74,6 +85,19 @@
       .response-text {
         font-size: 18px;
       }
+
+      table {
+        width: 100%;
+        margin-top: 20px;
+        border-collapse: collapse;
+      }
+
+      th,
+      td {
+        padding: 12px;
+        text-align: left;
+        border: 1px solid #ddd;
+      }
     }
 
     /* Page Styling */
@@ -96,11 +120,6 @@
       font-size: 24px;
       color: #333;
       margin-bottom: 20px;
-    }
-
-    .response-text {
-      font-size: 18px;
-      color: #555;
     }
 
     .input-box {
@@ -136,11 +155,6 @@
       display: none;
     }
 
-    .logo img {
-      max-width: 200px;
-      height: auto;
-    }
-
   </style>
 </head>
 
@@ -158,7 +172,40 @@
     <button class="button" onclick="verifyCertificate()">Verify</button>
 
     <div id="result" class="result-container">
-      <div id="certificateDetails" class="response-text"></div>
+      <table>
+        <tr>
+          <th>Field</th>
+          <th>Details</th>
+        </tr>
+        <tr>
+          <td>Name</td>
+          <td id="name"></td>
+        </tr>
+        <tr>
+          <td>Registration No</td>
+          <td id="regNo"></td>
+        </tr>
+        <tr>
+          <td>Course</td>
+          <td id="course"></td>
+        </tr>
+        <tr>
+          <td>Start Date</td>
+          <td id="startDate"></td>
+        </tr>
+        <tr>
+          <td>End Date</td>
+          <td id="endDate"></td>
+        </tr>
+        <tr>
+          <td>Marks</td>
+          <td id="marks"></td>
+        </tr>
+        <tr>
+          <td>Result</td>
+          <td id="resultStatus"></td>
+        </tr>
+      </table>
     </div>
   </div>
 
@@ -177,9 +224,22 @@
       fetch(url)
         .then(response => response.text())
         .then(data => {
-          // Show result section and populate the details
+          if (data.startsWith("❌")) {
+            alert(data);
+            return;
+          }
+
+          // Show result section and populate the table
           document.getElementById("result").style.display = "block";
-          document.getElementById("certificateDetails").innerHTML = data;
+          const details = data.split("\n");
+
+          document.getElementById("name").innerText = details[0].split(":")[1].trim();
+          document.getElementById("regNo").innerText = details[1].split(":")[1].trim();
+          document.getElementById("course").innerText = details[2].split(":")[1].trim();
+          document.getElementById("startDate").innerText = details[3].split(":")[1].trim();
+          document.getElementById("endDate").innerText = details[4].split(":")[1].trim();
+          document.getElementById("marks").innerText = details[5].split(":")[1].trim();
+          document.getElementById("resultStatus").innerText = details[6].split(":")[1].trim();
         })
         .catch(error => {
           alert("Error fetching result. Please try again later.");
