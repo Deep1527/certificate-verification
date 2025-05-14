@@ -7,79 +7,79 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f7f7f7;
-      padding: 20px;
+      background-color: #f9f9f9;
       text-align: center;
+      padding: 20px;
     }
-
-    h1 {
-      color: #222;
+    .logo {
+      max-width: 150px;
+      margin: 0 auto 20px;
     }
-
+    .container {
+      background-color: #fff;
+      padding: 30px;
+      max-width: 500px;
+      margin: auto;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
     input[type="text"] {
       padding: 10px;
-      width: 250px;
+      width: 80%;
+      margin-bottom: 20px;
       font-size: 16px;
-      border-radius: 5px;
-      border: 1px solid #aaa;
     }
-
     button {
       padding: 10px 20px;
       font-size: 16px;
-      background-color: #222;
-      color: white;
-      border: none;
-      border-radius: 5px;
       cursor: pointer;
     }
-
-    button:hover {
-      background-color: #444;
-    }
-
     #result {
-      margin-top: 30px;
+      margin-top: 20px;
       white-space: pre-line;
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0px 0px 10px #ccc;
+      text-align: left;
+      background: #f1fff0;
+      border: 1px solid #b2d8b2;
+      padding: 15px;
+      border-radius: 5px;
+      display: none;
     }
   </style>
 </head>
 <body>
 
-  <h1>🔍 Certificate Verification</h1>
-  <p>Enter your Registration Number (e.g. <strong>Mice001</strong>)</p>
-  <input type="text" id="regInput" placeholder="Enter Registration No" />
-  <button onclick="verifyCertificate()">Check</button>
+  <img src="https://drive.google.com/uc?export=view&id=1iK9pYRFUV2OzQpZ4xeXbXYPzweXlA9im" alt="Mahakaal Logo" class="logo" />
 
-  <div id="result"></div>
+  <div class="container">
+    <h2>Certificate Verification</h2>
+    <input type="text" id="reg" placeholder="Enter Registration No (e.g. MICE001)" />
+    <br/>
+    <button onclick="verify()">Verify</button>
+    <div id="result"></div>
+  </div>
 
   <script>
-    async function verifyCertificate() {
-      const reg = document.getElementById("regInput").value.trim();
-      const resultDiv = document.getElementById("result");
-
+    function verify() {
+      const reg = document.getElementById("reg").value.trim();
       if (!reg) {
-        resultDiv.innerText = "❗ Please enter a registration number.";
+        alert("Please enter a registration number.");
         return;
       }
 
-      const formattedReg = reg.toLowerCase(); // ensure lowercase for matching
-      const url = `https://script.google.com/macros/s/AKfycbwIWIGUNjFb5Xm3SiO-KTUBp3h2VHYfSX05hFyTiZ-Y87UZesUCBezLXUd9mdXbXGOlwQ/exec?reg=${formattedReg}`;
+      const resultDiv = document.getElementById("result");
+      resultDiv.style.display = "block";
+      resultDiv.textContent = "⏳ Verifying...";
 
-      resultDiv.innerText = "⏳ Verifying...";
-
-      try {
-        const response = await fetch(url);
-        const text = await response.text();
-        resultDiv.innerText = text;
-      } catch (error) {
-        resultDiv.innerText = "❌ Error fetching result. Please try again later.";
-      }
+      fetch(`https://script.google.com/macros/s/AKfycbwIWIGUNjFb5Xm3SiO-KTUBp3h2VHYfSX05hFyTiZ-Y87UZesUCBezLXUd9mdXbXGOlwQ/exec?reg=${reg}`)
+        .then(response => response.text())
+        .then(data => {
+          resultDiv.textContent = data;
+        })
+        .catch(err => {
+          resultDiv.textContent = "❌ Error fetching result. Please try again later.";
+        });
     }
   </script>
+
 </body>
 </html>
