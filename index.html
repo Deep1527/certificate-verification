@@ -1,192 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Certificate Verification</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Certificate Verification - Mahakaal Institute</title>
   <style>
-    /* Basic Reset */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-      color: #333;
-    }
-
-    /* Mobile-Friendly View */
-    @media (max-width: 768px) {
-      body {
-        font-size: 14px;
-      }
-
-      .container {
-        width: 100%;
-        padding: 10px;
-      }
-
-      .logo {
-        max-width: 80%;
-        height: auto;
-      }
-
-      .result-container {
-        padding: 10px;
-      }
-
-      .heading {
-        font-size: 20px;
-      }
-
-      .response-text {
-        font-size: 16px;
-      }
-    }
-
-    /* Larger Screen (Tablet and Desktop) */
-    @media (min-width: 769px) {
-      body {
-        font-size: 16px;
-      }
-
-      .container {
-        width: 80%;
-        margin: 0 auto;
-      }
-
-      .logo {
-        max-width: 100%;
-      }
-
-      .result-container {
-        padding: 20px;
-      }
-
-      .heading {
-        font-size: 24px;
-      }
-
-      .response-text {
-        font-size: 18px;
-      }
-    }
-
-    /* Page Styling */
-    .container {
-      width: 80%;
-      margin: 0 auto;
-      text-align: center;
-      background-color: #fff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f8f9fa;
       padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
     }
-
-    .logo {
-      max-width: 100%;
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      padding: 30px;
+    }
+    img.logo {
+      width: 100px;
       margin-bottom: 20px;
     }
-
-    .heading {
-      font-size: 24px;
-      color: #333;
+    h1 {
       margin-bottom: 20px;
+      color: #212529;
     }
-
-    .response-text {
-      font-size: 18px;
-      color: #555;
-    }
-
-    .input-box {
-      margin-bottom: 20px;
-    }
-
-    .input-box input {
-      width: 80%;
+    input[type="text"] {
       padding: 10px;
+      width: 80%;
       font-size: 16px;
-      border-radius: 4px;
-      border: 1px solid #ccc;
+      margin-bottom: 20px;
+      border: 1px solid #ced4da;
+      border-radius: 5px;
     }
-
-    .button {
+    button {
       padding: 10px 20px;
-      font-size: 18px;
-      border-radius: 4px;
-      background-color: #4CAF50;
-      color: white;
+      font-size: 16px;
+      background: #ffc107;
+      border: none;
+      border-radius: 5px;
       cursor: pointer;
     }
-
-    .button:hover {
-      background-color: #45a049;
+    button:hover {
+      background: #e0a800;
     }
-
-    .result-container {
-      margin-top: 20px;
-      background-color: #f1f1f1;
+    pre {
+      text-align: left;
+      background: #f1f3f5;
       padding: 15px;
-      border-radius: 8px;
-      display: none;
+      border-radius: 5px;
+      white-space: pre-wrap;
     }
-
-    .logo img {
-      max-width: 200px;
-      height: auto;
-    }
-
   </style>
 </head>
-
 <body>
-
   <div class="container">
-    <img src="https://drive.google.com/uc?id=1iK9pYRFUV2OzQpZ4xeXbXYPzweXlA9im" alt="Mahakaal Institute Logo" class="logo">
-    <h1 class="heading">Certificate Verification</h1>
-
-    <div class="input-box">
-      <label for="regNumber">Enter Your Registration Number:</label>
-      <input type="text" id="regNumber" placeholder="e.g., MICE001">
-    </div>
-
-    <button class="button" onclick="verifyCertificate()">Verify</button>
-
-    <div id="result" class="result-container">
-      <div id="certificateDetails" class="response-text"></div>
-    </div>
+    <img src="https://drive.google.com/uc?id=1iK9pYRFUV2OzQpZ4xeXbXYPzweXlA9im" alt="Mahakaal Logo" class="logo" />
+    <h1>Certificate Verification</h1>
+    <input type="text" id="regNo" placeholder="Enter Registration Number (e.g. MICE001)" />
+    <br />
+    <button onclick="verifyCertificate()">Verify</button>
+    <br /><br />
+    <pre id="result">Result will appear here...</pre>
   </div>
 
   <script>
-    function verifyCertificate() {
-      var reg = document.getElementById("regNumber").value.trim();
+    async function verifyCertificate() {
+      const reg = document.getElementById("regNo").value.trim();
+      const resultBox = document.getElementById("result");
 
       if (!reg) {
-        alert("Please enter a registration number.");
+        resultBox.textContent = "❗ Please enter a registration number.";
         return;
       }
 
-      // Make API call to the Google Apps Script
-      var url = "https://script.google.com/macros/s/AKfycbwIWIGUNjFb5Xm3SiO-KTUBp3h2VHYfSX05hFyTiZ-Y87UZesUCBezLXUd9mdXbXGOlwQ/exec?reg=" + reg;
+      resultBox.textContent = "🔄 Verifying... Please wait...";
 
-      fetch(url)
-        .then(response => response.text())
-        .then(data => {
-          // Show result section and populate the details
-          document.getElementById("result").style.display = "block";
-          document.getElementById("certificateDetails").innerHTML = data;
-        })
-        .catch(error => {
-          alert("Error fetching result. Please try again later.");
-        });
+      try {
+        const response = await fetch(`https://script.google.com/macros/s/AKfycbwIWIGUNjFb5Xm3SiO-KTUBp3h2VHYfSX05hFyTiZ-Y87UZesUCBezLXUd9mdXbXGOlwQ/exec?reg=${encodeURIComponent(reg)}`);
+        const text = await response.text();
+        resultBox.textContent = text;
+      } catch (err) {
+        resultBox.textContent = "❌ Error fetching result. Please try again later.";
+      }
     }
   </script>
-
 </body>
-
 </html>
