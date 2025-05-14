@@ -1,85 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Certificate Verification - Mahakaal Institute</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f9f9f9;
-      text-align: center;
-      padding: 20px;
-    }
-    .logo {
-      max-width: 150px;
-      margin: 0 auto 20px;
-    }
-    .container {
-      background-color: #fff;
-      padding: 30px;
-      max-width: 500px;
-      margin: auto;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    input[type="text"] {
-      padding: 10px;
-      width: 80%;
-      margin-bottom: 20px;
-      font-size: 16px;
-    }
-    button {
-      padding: 10px 20px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    #result {
-      margin-top: 20px;
-      white-space: pre-line;
-      text-align: left;
-      background: #f1fff0;
-      border: 1px solid #b2d8b2;
-      padding: 15px;
-      border-radius: 5px;
-      display: none;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate Verification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 50px;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 600px;
+            margin: auto;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .logo {
+            width: 150px;
+            margin-bottom: 20px;
+        }
+        .response {
+            background-color: #e2f7e2;
+            border: 2px solid #4caf50;
+            padding: 10px;
+            border-radius: 5px;
+            color: #333;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: left;
+        }
+        .error {
+            background-color: #ffdddd;
+            border: 2px solid #f44336;
+            padding: 10px;
+            border-radius: 5px;
+            color: #f44336;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: left;
+        }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <img src="https://drive.google.com/uc?export=view&id=1iK9pYRFUV2OzQpZ4xeXbXYPzweXlA9im" alt="Mahakaal Logo" class="logo">
+        <h1>Certificate Verification</h1>
+        <p>Enter your Registration Number below to verify your certificate.</p>
+        <form id="verification-form">
+            <input type="text" id="reg-number" placeholder="Enter Registration Number (e.g. MICE001)" required>
+            <button type="submit">Verify</button>
+        </form>
+        <div id="response-container"></div>
+    </div>
 
-<img src="https://drive.google.com/uc?export=view&id=1iK9pYRFUV2OzQpZ4xeXbXYPzweXlA9im" alt="Mahakaal Logo" class="logo" />
+    <script>
+        document.getElementById("verification-form").addEventListener("submit", function(event) {
+            event.preventDefault();
 
-  <div class="container">
-    <h2>Certificate Verification</h2>
-    <input type="text" id="reg" placeholder="Enter Registration No (e.g. MICE001)" />
-    <br/>
-    <button onclick="verify()">Verify</button>
-    <div id="result"></div>
-  </div>
+            var regNumber = document.getElementById("reg-number").value.trim();
 
-  <script>
-    function verify() {
-      const reg = document.getElementById("reg").value.trim();
-      if (!reg) {
-        alert("Please enter a registration number.");
-        return;
-      }
+            if (regNumber) {
+                // Format registration number to lowercase and prepend "MICE" if not present
+                var formattedRegNumber = regNumber.toUpperCase();
+                
+                // Construct the URL to call the Google Apps Script web app
+                var url = `https://script.google.com/macros/s/AKfycbwIWIGUNjFb5Xm3SiO-KTUBp3h2VHYfSX05hFyTiZ-Y87UZesUCBezLXUd9mdXbXGOlwQ/exec?reg=${formattedRegNumber}`;
 
-      const resultDiv = document.getElementById("result");
-      resultDiv.style.display = "block";
-      resultDiv.textContent = "⏳ Verifying...";
-
-      fetch(`https://script.google.com/macros/s/AKfycbwIWIGUNjFb5Xm3SiO-KTUBp3h2VHYfSX05hFyTiZ-Y87UZesUCBezLXUd9mdXbXGOlwQ/exec?reg=${reg}`)
-        .then(response => response.text())
-        .then(data => {
-          resultDiv.textContent = data;
-        })
-        .catch(err => {
-          resultDiv.textContent = "❌ Error fetching result. Please try again later.";
+                // Make the request to fetch the result
+                fetch(url)
+                    .then(response => response.text())
+                    .then(data => {
+                        document.getElementById("response-container").innerHTML = data;
+                    })
+                    .catch(error => {
+                        document.getElementById("response-container").innerHTML = `<div class="error">❌ Error fetching result. Please try again later.</div>`;
+                    });
+            } else {
+                document.getElementById("response-container").innerHTML = `<div class="error">❌ Please provide a valid Registration Number.</div>`;
+            }
         });
-    }
-  </script>
-
+    </script>
 </body>
 </html>
