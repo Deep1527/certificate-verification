@@ -1,93 +1,192 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Certificate Verification</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            text-align: center;
-            padding: 50px;
-        }
-        .container {
-            background-color: #ffffff;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-            width: 80%;
-            max-width: 600px;
-            margin: auto;
-        }
-        h1 {
-            color: #333;
-            margin-bottom: 20px;
-        }
-        .logo {
-            width: 150px;
-            margin-bottom: 20px;
-        }
-        .response {
-            background-color: #e2f7e2;
-            border: 2px solid #4caf50;
-            padding: 10px;
-            border-radius: 5px;
-            color: #333;
-            font-size: 16px;
-            font-weight: bold;
-            text-align: left;
-        }
-        .error {
-            background-color: #ffdddd;
-            border: 2px solid #f44336;
-            padding: 10px;
-            border-radius: 5px;
-            color: #f44336;
-            font-size: 16px;
-            font-weight: bold;
-            text-align: left;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Certificate Verification</title>
+  <style>
+    /* Basic Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+
+    /* Mobile-Friendly View */
+    @media (max-width: 768px) {
+      body {
+        font-size: 14px;
+      }
+
+      .container {
+        width: 100%;
+        padding: 10px;
+      }
+
+      .logo {
+        max-width: 80%;
+        height: auto;
+      }
+
+      .result-container {
+        padding: 10px;
+      }
+
+      .heading {
+        font-size: 20px;
+      }
+
+      .response-text {
+        font-size: 16px;
+      }
+    }
+
+    /* Larger Screen (Tablet and Desktop) */
+    @media (min-width: 769px) {
+      body {
+        font-size: 16px;
+      }
+
+      .container {
+        width: 80%;
+        margin: 0 auto;
+      }
+
+      .logo {
+        max-width: 100%;
+      }
+
+      .result-container {
+        padding: 20px;
+      }
+
+      .heading {
+        font-size: 24px;
+      }
+
+      .response-text {
+        font-size: 18px;
+      }
+    }
+
+    /* Page Styling */
+    .container {
+      width: 80%;
+      margin: 0 auto;
+      text-align: center;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .logo {
+      max-width: 100%;
+      margin-bottom: 20px;
+    }
+
+    .heading {
+      font-size: 24px;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .response-text {
+      font-size: 18px;
+      color: #555;
+    }
+
+    .input-box {
+      margin-bottom: 20px;
+    }
+
+    .input-box input {
+      width: 80%;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+
+    .button {
+      padding: 10px 20px;
+      font-size: 18px;
+      border-radius: 4px;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+
+    .button:hover {
+      background-color: #45a049;
+    }
+
+    .result-container {
+      margin-top: 20px;
+      background-color: #f1f1f1;
+      padding: 15px;
+      border-radius: 8px;
+      display: none;
+    }
+
+    .logo img {
+      max-width: 200px;
+      height: auto;
+    }
+
+  </style>
 </head>
+
 <body>
-    <div class="container">
-        <img src="https://drive.google.com/file/d/1iK9pYRFUV2OzQpZ4xeXbXYPzweXlA9im/view" alt="Mahakaal Institute" class="logo">
-        <h1>Certificate Verification</h1>
-        <p>Enter your Registration Number below to verify your certificate.</p>
-        <form id="verification-form">
-            <input type="text" id="reg-number" placeholder="Enter Registration Number (e.g. MICE001)" required>
-            <button type="submit">Verify</button>
-        </form>
-        <div id="response-container"></div>
+
+  <div class="container">
+    <img src="https://drive.google.com/uc?id=1iK9pYRFUV2OzQpZ4xeXbXYPzweXlA9im" alt="Mahakaal Institute Logo" class="logo">
+    <h1 class="heading">Certificate Verification</h1>
+
+    <div class="input-box">
+      <label for="regNumber">Enter Your Registration Number:</label>
+      <input type="text" id="regNumber" placeholder="e.g., MICE001">
     </div>
 
-    <script>
-        document.getElementById("verification-form").addEventListener("submit", function(event) {
-            event.preventDefault();
+    <button class="button" onclick="verifyCertificate()">Verify</button>
 
-            var regNumber = document.getElementById("reg-number").value.trim();
+    <div id="result" class="result-container">
+      <div id="certificateDetails" class="response-text"></div>
+    </div>
+  </div>
 
-            if (regNumber) {
-                // Format registration number to lowercase and prepend "MICE" if not present
-                var formattedRegNumber = regNumber.toUpperCase();
-                
-                // Construct the URL to call the Google Apps Script web app
-                var url = `https://script.google.com/macros/s/AKfycbwIWIGUNjFb5Xm3SiO-KTUBp3h2VHYfSX05hFyTiZ-Y87UZesUCBezLXUd9mdXbXGOlwQ/exec?reg=${formattedRegNumber}`;
+  <script>
+    function verifyCertificate() {
+      var reg = document.getElementById("regNumber").value.trim();
 
-                // Make the request to fetch the result
-                fetch(url)
-                    .then(response => response.text())
-                    .then(data => {
-                        document.getElementById("response-container").innerHTML = data;
-                    })
-                    .catch(error => {
-                        document.getElementById("response-container").innerHTML = `<div class="error">❌ Error fetching result. Please try again later.</div>`;
-                    });
-            } else {
-                document.getElementById("response-container").innerHTML = `<div class="error">❌ Please provide a valid Registration Number.</div>`;
-            }
+      if (!reg) {
+        alert("Please enter a registration number.");
+        return;
+      }
+
+      // Make API call to the Google Apps Script
+      var url = "https://script.google.com/macros/s/AKfycbwIWIGUNjFb5Xm3SiO-KTUBp3h2VHYfSX05hFyTiZ-Y87UZesUCBezLXUd9mdXbXGOlwQ/exec?reg=" + reg;
+
+      fetch(url)
+        .then(response => response.text())
+        .then(data => {
+          // Show result section and populate the details
+          document.getElementById("result").style.display = "block";
+          document.getElementById("certificateDetails").innerHTML = data;
+        })
+        .catch(error => {
+          alert("Error fetching result. Please try again later.");
         });
-    </script>
+    }
+  </script>
+
 </body>
+
 </html>
